@@ -15,10 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from account.api.views import registration_view
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/register/', registration_view, name="register"),
-    path('api/account/', include('account.api.urls', 'account_api')),
+    url(r'^auth/', include('account.api.urls')),
 ]
