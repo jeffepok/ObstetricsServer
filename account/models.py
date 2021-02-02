@@ -3,39 +3,30 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 
 class AccountManager(BaseUserManager):
-	def create_user(self, email, username, first_name, last_name, phone,
-	password=None,):
+	def create_user(self, email, password, username=None, first_name=None, last_name=None, phone=None):
 		if not email:
 			raise ValueError('Users must have an email address')
-		if not username:
-			raise ValueError('Users must have a username')
-		if not first_name:
-			raise ValueError('Users must have first_name')
-		if not last_name:
-			raise ValueError('Users must have last_name')
-		if not phone:
-			raise ValueError('Users must have phone number')
+		# if not username:
+		# 	raise ValueError('Users must have a username')
+		# if not first_name:
+		# 	raise ValueError('Users must have first_name')
+		# if not last_name:
+		# 	raise ValueError('Users must have last_name')
+		# if not phone:
+		# 	raise ValueError('Users must have phone number')
 
 		user = self.model(
 			email=self.normalize_email(email),
-			username=username,
-			first_name= first_name,
-			last_name=last_name,
-			phone=phone,
 		)
 
 		user.set_password(password)
 		user.save(using=self._db)
 		return user
 
-	def create_superuser(self, email, username, password, first_name=None, last_name=None, phone=None):
+	def create_superuser(self, email,  password, username=None, first_name=None, last_name=None, phone=None):
 		user = self.create_user(
 			email=self.normalize_email(email),
 			password=password,
-			username=username,
-			first_name=first_name,
-			last_name=last_name,
-			phone=phone
 		)
 		user.is_admin = True
 		user.is_staff = True
@@ -45,10 +36,10 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
 	email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-	username = models.CharField(max_length=30, unique=True)
-	first_name = models.CharField(max_length=30)
-	last_name = models.CharField(max_length=30)
-	phone = models.CharField(null = True, max_length = 30)
+	username = models.CharField(max_length=30, blank=True)
+	first_name = models.CharField(max_length=30, blank=True)
+	last_name = models.CharField(max_length=30, blank=True)
+	phone = models.CharField(max_length = 30, blank=True)
 	date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
 	last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
 	is_admin = models.BooleanField(default=False)
@@ -59,12 +50,12 @@ class Account(AbstractBaseUser):
 
 	USERNAME_FIELD = 'email'
 	
-	REQUIRED_FIELDS = [
-		'username', 
-		'phone', 
-		'first_name',
-		'last_name',
-	]
+	# REQUIRED_FIELDS = [
+	# 	'username', 
+	# 	'phone', 
+	# 	'first_name',
+	# 	'last_name',
+	# ]
 	objects = AccountManager()
 	
 	def get_username(self):

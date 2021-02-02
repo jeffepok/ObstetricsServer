@@ -41,8 +41,7 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SERIALIZERS': {
-        'user_create': 'account.api.serializers.UserCreationSerializer',
-        'user': 'account.api.serializers.UserCreateSerializer'
+        'user': 'account.api.serializers.UserCreateSerializer',
     }
 }
 
